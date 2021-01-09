@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14848909dbc00f142955292051e62f02, type: 3}
+  m_Name: BlueLaser
+  m_EditorClassIdentifier: 
+  weaponName: Blue Laser
+  cost: 100
+  description: Slow fire rate, high range and damage
+  fireRate: 0.8
+  damage: 120
+  range: 100
+  color: {r: 0.015686274, g: 1, b: 0.8778094, a: 1}
