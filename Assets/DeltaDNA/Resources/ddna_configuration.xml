@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-16"?>
+<configuration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <environment_key_dev>06134226933936120682437617616102</environment_key_dev>
+  <environment_key_live>06134238846817126425289642416102</environment_key_live>
+  <environment_key>0</environment_key>
+  <collect_url>https://collect19978ttrln.deltadna.net/collect/api</collect_url>
+  <engage_url>https://engage19978ttrln.deltadna.net</engage_url>
+  <hash_secret />
+  <client_version />
+  <use_application_version>true</use_application_version>
+</configuration>
