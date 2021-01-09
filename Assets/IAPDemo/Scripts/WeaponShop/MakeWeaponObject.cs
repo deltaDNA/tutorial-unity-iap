@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 
 public class MakeWeaponObject {
-
+# if UNITY_EDITOR
 	[MenuItem("Assets/Create/Weapon Object")]
 	public static void CreateWeaponObject()
 	{
@@ -15,4 +15,5 @@ public class MakeWeaponObject {
 		Selection.activeObject = asset;
 
 	}
+#endif
 }

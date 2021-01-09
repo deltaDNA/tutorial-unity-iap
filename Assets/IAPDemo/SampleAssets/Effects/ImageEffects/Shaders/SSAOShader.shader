@@ -33,7 +33,7 @@ v2f_ao vert_ao (appdata_img v)
 sampler2D _CameraDepthNormalsTexture;
 sampler2D _RandomTexture;
 float4 _Params; // x=radius, y=minz, z=attenuation power, w=SSAO power
-
+/*
 // HLSL and GLSL do not support arbitrarily sized arrays as function parameters (eg. float bla[]), whereas Cg does.
 #if !defined(UNITY_COMPILER_CG)
 
@@ -57,7 +57,7 @@ float4 _Params; // x=radius, y=minz, z=attenuation power, w=SSAO power
 #	define INPUT_SAMPLE_COUNT
 #	include "frag_ao.cginc"
 #endif
-
+*/
 ENDCG
 
 	// ---- SSAO pass, 8 samples
@@ -68,6 +68,8 @@ CGPROGRAM
 #pragma fragment frag
 #pragma target 3.0
 
+ #define INPUT_SAMPLE_COUNT 8
+ #include "frag_ao.cginc"
 
 half4 frag (v2f_ao i) : SV_Target
 {
