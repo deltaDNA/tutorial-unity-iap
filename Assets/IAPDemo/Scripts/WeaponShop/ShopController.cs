@@ -17,8 +17,9 @@ public class ShopController : MonoBehaviour {
 
 	}
 
-	void OpenShop()
+	public void OpenShop()
 	{
+		Debug.Log("Store Click");
 		shopCanvas.enabled = true;
 		Time.timeScale = 0;
 	}

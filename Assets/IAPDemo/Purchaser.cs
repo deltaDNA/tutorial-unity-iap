@@ -23,7 +23,7 @@ namespace CompleteProject
         // when defining the Product Identifiers on the store. Except, for illustration purposes, the 
         // kProductIDSubscription - it has custom Apple and Google identifiers. We declare their store-
         // specific mapping to Unity Purchasing's AddProduct, below.
-        public static string kProductIDConsumable = "consumable";
+        public static string kProductIDConsumable = "com.deltadna.survivalshooter.gold100";
         public static string kProductIDNonConsumable = "nonconsumable";
         public static string kProductIDSubscription = "subscription";
 
@@ -60,6 +60,7 @@ namespace CompleteProject
             builder.AddProduct(kProductIDConsumable, ProductType.Consumable);
             // Continue adding the non-consumable product.
             builder.AddProduct(kProductIDNonConsumable, ProductType.NonConsumable);
+            
             // And finish adding the subscription product. Notice this uses store-specific IDs, illustrating
             // if the Product ID was configured differently between Apple and Google stores. Also note that
             // one uses the general kProductIDSubscription handle inside the game - the store-specific IDs 
