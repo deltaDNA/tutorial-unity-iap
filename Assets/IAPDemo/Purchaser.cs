@@ -33,6 +33,10 @@ namespace CompleteProject
         // Google Play Store-specific product identifier subscription product.
         private static string kProductNameGooglePlaySubscription = "com.unity3d.subscription.original";
 
+        // Game Object that holds our DeltaDNA analytics tutorial script
+        private GameObject ddnaTutorial; 
+        
+
         void Start()
         {
             // If we haven't set up the Unity Purchasing reference
@@ -41,6 +45,11 @@ namespace CompleteProject
                 // Begin to configure our connection to Purchasing
                 InitializePurchasing();
             }
+
+            // Find deltaDNA Analytics code 
+            ddnaTutorial = GameObject.Find("DDNA-Tutorial");
+
+
         }
 
         public void InitializePurchasing()
@@ -212,6 +221,13 @@ namespace CompleteProject
                 Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
                 // The consumable item has been successfully purchased, add 100 coins to the player's in-game score.
                 ScoreManager.score += 100;
+
+                // Record a DDNA transaction event if we have a purchased product and can find the DDNA tutorial code.
+                if (args.purchasedProduct != null && ddnaTutorial != null)
+                {
+                    ddnaTutorial.GetComponent<transaction_tutorial>().RecordIapTransaction(args.purchasedProduct);                    
+                }
+
             }
             // Or ... a non-consumable product has been purchased by this user.
             else if (String.Equals(args.purchasedProduct.definition.id, kProductIDNonConsumable, StringComparison.Ordinal))
