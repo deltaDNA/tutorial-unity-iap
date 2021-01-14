@@ -46,9 +46,12 @@ public class transaction_tutorial : MonoBehaviour
             DisableUnityAnalytics();
         }
 
-        // Start the deltaDNA SDK
-        DDNA.Instance.SetLoggingLevel(DeltaDNA.Logger.Level.DEBUG); 
-        DDNA.Instance.StartSDK();
+        // Start the deltaDNA SDK, if it isn't already running
+        if (!DDNA.Instance.HasStarted)
+        {
+            DDNA.Instance.SetLoggingLevel(DeltaDNA.Logger.Level.DEBUG);
+            DDNA.Instance.StartSDK();
+        }
 
 
     }
