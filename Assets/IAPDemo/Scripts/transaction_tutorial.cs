@@ -76,11 +76,12 @@ public class transaction_tutorial : MonoBehaviour
             // Create a transaction using the products spent and received objects 
             // Note that the transaction type should always be "PURCHASE" for IAPs
             var transactionEvent = new Transaction(
-                iap.definition.id,
+                iap.metadata.localizedTitle,
                 "PURCHASE",
                 productsReceived,
                 productsSpent)
-                .SetTransactionId(iap.transactionID);
+                .SetTransactionId(iap.transactionID)
+                .AddParam("productID",iap.definition.id);
             
             // Add the transaction receipt if we have one.
             if(iap.hasReceipt)
@@ -92,21 +93,20 @@ public class transaction_tutorial : MonoBehaviour
                 TransactionReceipt transactionReceipt = new TransactionReceipt();
                 transactionReceipt = JsonUtility.FromJson<TransactionReceipt>(iap.receipt);
 
-                #if UNITY_ANDROID && !UNITY_EDITOR
-
+                if(transactionReceipt.Store == "AppleAppStore")
+                {
+                    transactionEvent.SetServer("APPLE");
+                    transactionEvent.SetReceipt(transactionReceipt.Payload.ToString());
+                }
+                else if (transactionReceipt.Store == "GooglePlay")
+                {
                     GooglePlayReceipt googleReceipt = new GooglePlayReceipt();
                     googleReceipt = JsonUtility.FromJson<GooglePlayReceipt>(transactionReceipt.Payload);
 
                     transactionEvent.SetServer("GOOGLE");
                     transactionEvent.SetReceipt(googleReceipt.json);
                     transactionEvent.SetReceiptSignature(googleReceipt.signature);
-                  
-                #elif UNITY_IOS || UNITY_EDITOR
-
-                    transactionEvent.SetServer("APPLE");
-                    transactionEvent.SetReceipt(transactionReceipt.Payload.ToString());
-
-                #endif                
+                }             
             }
 
             // Record the transaction event
