@@ -61,7 +61,7 @@ The ```\Assets\IAPDemo\Purchaser.cs``` file contains a ```Purchase``` class that
 
 To avoid cluttering up this existing ```Purchase``` class a method is called in our own tutorial code when the player player makes a successful purchase. 
 
-We do this by creating a GameObject to reference our tutorial from the ```Purchase``` class.
+We do this by creating a GameObject to reference our tutorial code from within the ```Purchase``` class.
 ```csharp
 // Game Object that holds our DeltaDNA analytics tutorial script
 private GameObject ddnaTutorial; 
@@ -94,7 +94,7 @@ public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
 ```
 
 ## DDNA transaction event code ##
-The DeltaDNA **transaction** is a complex event with many parameters, some of which are required for it to pass event validation. There are some helper functions in the DelatDNA SDK to simplify the creation **transaction** events, we will use some of them, rather than populate the ```GameEvent``` a parameter at a time.
+The DeltaDNA **transaction** is a complex event with many parameters, some of which are required for it to pass event validation. There are some helper functions in the DelatDNA SDK to simplify the creation of **transaction** events, we will use some of them, rather than populate the ```GameEvent``` a parameter at a time.
 
 The complete code for the method that records the **transaction** event, based on the UnityIAP Product passed to it, is as follows.
 
@@ -165,7 +165,7 @@ We will step through it and explain each section in detail.
 So, lets look at that in a bit more detail.
 
 ### Confirm IAP Spend ####
-Before building the **transaction** event, we quickly validate that we have a currency type and amount for the IAP. In this game is shouldn't be possible to make an IAP without these.
+Before building the **transaction** event, we quickly validate that we have a currency type and amount for the IAP. In this game it shouldn't be possible to make an IAP without these.
 ```csharp
         if (!string.IsNullOrEmpty(iap.metadata.isoCurrencyCode)  && iap.metadata.localizedPrice > 0 )
 ```
@@ -174,7 +174,7 @@ Before building the **transaction** event, we quickly validate that we have a cu
 The **transaction** and several other deltaDNA events make use of special ```Product``` objects. When the event processor sees these it performs additional data processing and enrichment on the data. A ```Product``` object can contain an array of ```items```, ```virtualCurrencies``` or a ```realCurrency```. The **transaction** event contains a ```productsSpent``` and a ```productsReceived``` object making it possible to record transactions where the player spends or receives any combination of real or virtual currencies and items. The **transaction** is a very generic, but powerful event.
 
 In this scenario:
-* ```productsSpent``` contains the type an amount of real currency spent by the player, $0.99 USD. 
+* ```productsSpent``` contains the type and amount of real currency spent by the player, $0.99 USD. 
 * ```productsReceived``` contains the type and amount of virtual currency the player received, 100 Coins
 
 ```csharp
@@ -193,7 +193,7 @@ In this scenario:
                 .AddVirtualCurrency("Coins", "PREMIUM", 100);
 ```
 
-Note, the ```realCurrencyAmount``` isn't populated directly from the IAP currency amount, a ConverCurrency helper method from the Product object is used to ensure that value is correctly represented as an Integer. This is because not all ISO-4217 currencies will contain two units of currency after the decimal point (e.g. VND, JPY ...)
+Note, the ```realCurrencyAmount``` isn't populated directly from the IAP currency amount, a ConvertCurrency helper method from the Product class is used to ensure that value is correctly represented as an Integer. This is because not all ISO-4217 currencies will contain two units of currency after the decimal point (e.g. VND, JPY ...)
 
 ### Build the **transaction** event ###
 The ```Transaction``` helper class can now be used to construct the **transaction** event
@@ -210,7 +210,7 @@ The ```Transaction``` helper class can now be used to construct the **transactio
 ```
 
 ### Add transaction receipt details ###
-If IAP Product contained receipt fields from the Store, they should be mapped into the relavent parameters on the transaction event to enable server based receipt validation by deltaDNA, to prevent fraudulent transactions polluting your data reporting. The Google Play and Apple Store receipt validation systems have slightly different parameters. 
+If the IAP Product contained receipt fields from the Store, they should be mapped into the relavent parameters on the transaction event, to enable server based receipt validation by deltaDNA and prevent fraudulent transactions from polluting the dataset. The Google Play and Apple Store receipt validation systems have slightly different parameters. 
 ```csharp
             // Add the transaction receipt if we have one.
             if(iap.hasReceipt)
@@ -238,7 +238,7 @@ If IAP Product contained receipt fields from the Store, they should be mapped in
                 }             
             }
 ```
-Some simple classes have been created in the tutorial file in order to simplify parsing receipt data fields from the JSON provided by the IAP Plugin with the Unity ```JsonUtility.FromJson<>``` helper.
+Some simple classes have been created in the tutorial file in order to simplify the parsing of receipt data fields from the JSON provided by the IAP Plugin with the Unity ```JsonUtility.FromJson<>``` helper.
 ```csharp
 // A couple of little classes to simplify transaction receipt parsing from JSON.
 [System.Serializable]
@@ -264,6 +264,6 @@ With the **transaction** event built, it can now be recorded by the SDK. This wi
             Debug.Log(string.Format("Sent IAP transaction event to DDNA : {0}", iap.definition.id));
 ```
 ### Validation, Reporting and Analysis ###
-Once uploaded, the event will be queued for processing and should appear in the [SETUP > Event Browser](https://docs.deltadna.com/reference/setup/qa-events/) tool within 5-15 mins.  You can check if it passed event validation here and drill into the raw data and reasons should it fail validation. After that the event will flow into the data warehouse where it will be available to your reporting and analysis tools, this step can take upto a couple of hours. 
+Once uploaded, the event will be queued for processing and should appear in the [SETUP > Event Browser](https://docs.deltadna.com/reference/setup/qa-events/) tool within 5-15 mins.  You can check if it passed event validation here and drill into the raw data and see the reasons should it fail validation. After that the event will flow into the data warehouse where it will be available to your reporting and analysis tools, this step can take a couple of hours. 
 
-Be sure to take a look at [Know your Data](https://docs.deltadna.com/reference/analyze/direct-sql-access/#know_your_data) guide. It will help explain the structure of your data in the warehouse, this is particularly important on transaction events with their special ```Product``` objects as they will be split accross multiple rows in the ```Events``` database table.
+Be sure to take a look at the [Know your Data](https://docs.deltadna.com/reference/analyze/direct-sql-access/#know_your_data) guide. It explains the structure of your data in the warehouse, this is particularly important on transaction events with their special ```Product``` objects, as they will be split accross multiple rows in the ```Events``` database table.
