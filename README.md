@@ -8,6 +8,20 @@
  The tutorial builds on the existing [Unity IAP Tutorial](https://learn.unity.com/tutorial/unity-iap) using the [Unity IAP Plugin](https://docs.unity3d.com/Manual/UnityIAP.html) to smplify In-app purchase integration.
 
 
+## Contents ##
+* [Overview](#Overview)
+* [Making an IAP purchase](#Making-an-IAP-purchase)
+* [Tutorial Code](#Tutorial-Code)
+* [IAP Purchase code](#IAP-Purchase-code)
+* [DDNA transaction event code](#DDNA-transaction-event-code)
+    * [Confirm IAP Spend](#Confirm-IAP-Spend)
+    * [Create Products Spent and Received objects](#Create-ProductsSpent-and-ProductsReceived-objects)
+    * [Build the **transaction** event](#Build-the-transaction-event)
+    * [Add transaction receipt details](#Add-transaction-receipt-details)
+    * [Record the **transaction** event](#Record-the-transaction-event)
+* [Validation, Reporting and Analysis](#Validation,-Reporting-and-Analysis)
+
+
 ## Overview ##
 This tutorial extends the existing [Unity IAP Tutorial](https://learn.unity.com/tutorial/unity-iap) as follows:
 
@@ -156,7 +170,7 @@ Before building the **transaction** event, we quickly validate that we have a cu
         if (!string.IsNullOrEmpty(iap.metadata.isoCurrencyCode)  && iap.metadata.localizedPrice > 0 )
 ```
 
-### Create ProductsSpent and ProdutsReceived objects ###
+### Create ProductsSpent and ProductsReceived objects ###
 The **transaction** and several other deltaDNA events make use of special ```Product``` objects. When the event processor sees these it performs additional data processing and enrichment on the data. A ```Product``` object can contain an array of ```items```, ```virtualCurrencies``` or a ```realCurrency```. The **transaction** event contains a ```productsSpent``` and a ```productsReceived``` object making it possible to record transactions where the player spends or receives any combination of real or virtual currencies and items. The **transaction** is a very generic, but powerful event.
 
 In this scenario:
@@ -242,7 +256,7 @@ public class GooglePlayReceipt
 }
 ```
 
-### Record the **transaction** event
+### Record the **transaction** event ##
 With the **transaction** event built, it can now be recorded by the SDK. This will result in the event being stored to the SDK's local event cache and uploaded in the next scheduled upload, these normally happen at 1 minute intervals. 
 ```csharp
             // Record the transaction event
