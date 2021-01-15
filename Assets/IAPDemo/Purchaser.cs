@@ -46,7 +46,7 @@ namespace CompleteProject
                 InitializePurchasing();
             }
 
-            // Find deltaDNA Analytics code 
+            // Find deltaDNA Analytics Tutorial code 
             ddnaTutorial = GameObject.Find("DDNA-Tutorial");
 
 
@@ -222,8 +222,8 @@ namespace CompleteProject
                 // The consumable item has been successfully purchased, add 100 coins to the player's in-game score.
                 ScoreManager.score += 100;
 
-                // Record a DDNA transaction event if we have a purchased product and can find the DDNA tutorial code.
-                if (args.purchasedProduct != null && ddnaTutorial != null)
+                // Record a DDNA transaction event if we found the DDNA tutorial code.
+                if (ddnaTutorial != null)
                 {
                     ddnaTutorial.GetComponent<transaction_tutorial>().RecordIapTransaction(args.purchasedProduct);                    
                 }

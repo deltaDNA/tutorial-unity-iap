@@ -57,8 +57,7 @@ public class transaction_tutorial : MonoBehaviour
     }
 
     public void RecordIapTransaction(UnityEngine.Purchasing.Product iap)
-    {
-                       
+    {                     
         // Check that we have a revenue amount to record.
         if (!string.IsNullOrEmpty(iap.metadata.isoCurrencyCode)  && iap.metadata.localizedPrice > 0 )
         {
@@ -116,9 +115,6 @@ public class transaction_tutorial : MonoBehaviour
             DDNA.Instance.RecordEvent(transactionEvent);
             Debug.Log(string.Format("Sent IAP transaction event to DDNA : {0}", iap.definition.id));
         }
-
-
-
     }
 
 
